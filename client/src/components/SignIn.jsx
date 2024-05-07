@@ -1,7 +1,50 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const SignIn = () => {
+
+
+  const [user,setUser] = useState
+  ({
+    email: '',
+    password: ''
+  })
+   
+  const navigate = useNavigate()
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if(token){
+      navigate('/task')
+    }
+  }, [])
+
+  const SignUser = async (e)=>{
+    e.preventDefault()
+    try {
+      const response = await fetch('http://localhost:5000/signin',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password})
+      })
+      const data = await response.json()
+      if(data.success){
+        localStorage.setItem('token',data.token)
+        navigate('/task')
+      }
+      
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleChange =(e)=>{
+    setUser({...user, [e.target.name]: e.target.value})
+  }
+
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -12,7 +55,7 @@ const SignIn = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={SignUser}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
@@ -25,6 +68,7 @@ const SignIn = () => {
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -44,6 +88,7 @@ const SignIn = () => {
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={handleChange}
                 />
               </div>
             </div>

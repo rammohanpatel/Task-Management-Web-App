@@ -12,6 +12,7 @@ export  const createTask = async (req,res)=>{
 }
 
 export const getTasks = async (req,res)=>{
+    console.log(req.body)
     try {
         const tasks = await Task.find();
         res.status(200).json(tasks);

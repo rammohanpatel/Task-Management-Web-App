@@ -1,4 +1,5 @@
 import React, { useState ,useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Task = () => {
   
@@ -7,12 +8,23 @@ const Task = () => {
   const [dueDate, setDueDate] = useState('');
   const [tasks,setTasks] = useState([]); 
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [taskData, setTaskData] = useState([]);
+
+
+  
+  const navigate = useNavigate()
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if(!token){
+      navigate('/')
+    }
+  }, [])
 
 
   useEffect(() => {
     const getTasks = async () => {
       try {
-        const response = await fetch('http://localhost:5000/tasks');
+        const response = await fetch('http://localhost:5000/tasks',{ headers: { 'authToken' : localStorage.getItem('token'),'Content-Type':'application/json' }, method:"GET" } );
         const data = await response.json();
         console.log(data);
         setTasks(data);
@@ -22,13 +34,18 @@ const Task = () => {
     }
 
     getTasks();
-  }, []);
+    console.log(taskData);
+  }, [taskData]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(task, priority, dueDate);
     const taskData = { task, priority, dueDate };
+    
 
+    
     try {
       const response = await fetch('http://localhost:5000/tasks', {
         method: 'POST',
@@ -37,6 +54,10 @@ const Task = () => {
         },
         body: JSON.stringify(taskData),
       });
+
+      setTaskData(response.data);
+
+
 
       if (response.ok) {
         console.log('Task created successfully');
@@ -49,6 +70,7 @@ const Task = () => {
     } catch (error) {
       console.log('Failed to create task');
     }
+    
   }
 
   const handleEdit = (taskId) => {
@@ -71,6 +93,8 @@ const Task = () => {
         },
         body: JSON.stringify(taskData),
       });
+
+      setTaskData(response.data);
 
       if (response.ok) {
         console.log('Task updated successfully');
@@ -186,7 +210,7 @@ const Task = () => {
               onChange={(e) => setDueDate(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit"  className="btn btn-primary">
             Create Task
           </button>
         </form>

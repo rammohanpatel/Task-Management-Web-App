@@ -1,9 +1,11 @@
 import express from 'express';
 import {getTasks,createTask,updateTask,deleteTask} from '../controllers/tasks.js';
+import checkUser from '../middleware/checkUser.js';
+
 
 const router =  express.Router();
 
-router.get('/tasks',getTasks);
+router.get('/tasks',checkUser,getTasks);
 router.post('/tasks',createTask);
 router.patch('/tasks/:id',updateTask);
 router.delete('/tasks/:id',deleteTask);

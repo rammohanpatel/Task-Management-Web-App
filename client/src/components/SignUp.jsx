@@ -1,5 +1,5 @@
 import {React,useState} from 'react'
-import { Link } from 'react-router-dom' 
+import { Link, useNavigate } from 'react-router-dom' 
 
 
 const SignUp = () => {
@@ -11,11 +11,13 @@ const SignUp = () => {
   })
 
   const {username, email, password} = user
+
+  const navigate = useNavigate()
   
   const registerUser = async (e)=>{
     e.preventDefault()
     try {
-      const response = await fetch('http://localhost:3000/api/auth/signup',{
+      const response = await fetch('http://localhost:5000/signup',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,6 +25,11 @@ const SignUp = () => {
         body: JSON.stringify({username, email, password})
       })
       const data = await response.json()
+      if(data.success){
+        localStorage.setItem('token',data.token)
+        navigate('/task')
+      }
+      
       console.log(data)
     } catch (error) {
       console.log(error)

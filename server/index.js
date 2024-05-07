@@ -24,7 +24,7 @@ app.post('/api/auth/signup',(req,res)=>{
     res.send({message:'Data received'});
 })
 
-mongoose.connect(process.env.CONNECTION_URL,{useNewUrlParser:true,useUnifiedTopology:true})
+mongoose.connect(process.env.CONNECTION_URL)
 .then(()=>{
     app.listen(PORT,()=> console.log(`Server running on port : ${PORT}`))
 })
