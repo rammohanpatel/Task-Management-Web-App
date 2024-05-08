@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 
 export const createTask = async (req, res) => {
     const { priority, dueDate, task } = req.body;
+    console.log();
     try {
         const newTask = await Task.create({
             task, dueDate, priority, userId: req.body.decodedToken.id
