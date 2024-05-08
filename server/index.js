@@ -19,9 +19,8 @@ const PORT=process.env.PORT || 5000;
 app.use(taskRoutes);
 app.use(userRoutes);
 
-app.post('/api/auth/signup',(req,res)=>{
-    console.log(req.body);
-    res.send({message:'Data received'});
+app.get('/',(req,res)=>{
+    res.send('Hello to Task Manager API')
 })
 
 mongoose.connect(process.env.CONNECTION_URL)
