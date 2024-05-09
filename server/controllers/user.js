@@ -36,3 +36,19 @@ export const signup = async (req, res) => {
     }
 }
 
+// export const getUserInfo = async (req, res) => {
+//     try {
+//         const token = req.headers.authtoken;
+//         const decodedData = jwt.verify(token, secret);
+//         const user = await User.findById(decodedData.id);
+
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         res.status(200).json({ success: true, user: { id: user._id, username: user.username, email: user.email } });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({ message: 'Something went wrong' });
+//     }
+// };
