@@ -65,7 +65,7 @@ const Task = () => {
       return;
     }
     const taskData = { task, priority, dueDate };
-    console.log(dueDate);
+    // console.log(dueDate);
     try {
       const response = await fetch('https://task-management-web-app.onrender.com/tasks', {
         method: 'POST',
