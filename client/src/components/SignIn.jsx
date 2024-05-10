@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress';
+import toast from 'react-hot-toast';
 
 const SignIn = () => {
   const [user, setUser] = useState({
@@ -32,8 +33,12 @@ const SignIn = () => {
       });
       const data = await response.json();
       if (data.success) {
+        toast.success('Logged in Successfully');
         localStorage.setItem('token', data.token);
         navigate('/task');
+      }
+      else {   
+        toast('Incorrect Password or Email', { icon: '🔒'   })     
       }
       console.log(data);
     } catch (error) {

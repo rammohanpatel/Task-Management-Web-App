@@ -4,11 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx'; 
 import Task from './components/Task.jsx';
+import {Toaster} from 'react-hot-toast'
 
 
 const App = () => {
   return (
     <>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignIn />} />

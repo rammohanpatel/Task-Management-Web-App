@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
-
+import toast from 'react-hot-toast';
 
 /**
  * Represents a Task component.
@@ -77,6 +77,7 @@ const Task = () => {
       });
 
       if (response.ok) {
+        toast.success('Task Created', { icon: '🚀' });
         console.log('Task created successfully');
 
         // Update the client-side state with the newly created task
@@ -120,6 +121,7 @@ const Task = () => {
       });
 
       if (response.ok) {
+        toast.success('Task Updated', { icon: '🎉' });
         console.log('Task updated successfully');
 
         // Update the task in the client-side state
@@ -155,6 +157,7 @@ const Task = () => {
       });
 
       if (response.ok) {
+        toast.error('Task Deleted', { icon: '🗑️' });
         console.log('Task deleted successfully');
         const updatedTasks = tasks.filter((task) => task._id !== taskId);
         setTasks(updatedTasks);
@@ -196,6 +199,9 @@ const Task = () => {
       });
 
       if (response.ok) {
+        if(completed === true){
+          toast.success('Good Job!', { icon: '👏'})
+        }
         console.log('Task completion status updated successfully');
         const updatedTasks = tasks.map((task) => {
           if (task._id === taskId) {

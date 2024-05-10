@@ -1,7 +1,7 @@
 import {React,useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom' 
 import CircularProgress from '@mui/material/CircularProgress';
-
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
 
@@ -30,10 +30,12 @@ const SignUp = () => {
       })
       const data = await response.json()
       if(data.success){
+        toast.success('Registered Successfully')
         localStorage.setItem('token',data.token)
         navigate('/task')
-      }
-      
+      } else{
+        toast.error('User Already Exists', { icon: '🔒' })
+      }  
       console.log(data)
     } catch (error) {
       console.log(error)
