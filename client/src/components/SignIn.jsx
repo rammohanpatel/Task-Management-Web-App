@@ -1,24 +1,27 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import CircularProgress from '@mui/material/CircularProgress';
 
 const SignIn = () => {
-
-
   const [user, setUser] = useState({
     email: '',
     password: ''
-  })
+  });
 
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false); // New state for loading
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (token) {
-      navigate('/task')
+      navigate('/task');
     }
-  }, [navigate])
+  }, [navigate]);
 
   const SignUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setLoading(true); // Set loading to true when Sign In button is clicked
     try {
       const response = await fetch('https://task-management-web-app.onrender.com/signin', {
         method: 'POST',
@@ -26,23 +29,22 @@ const SignIn = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email: user.email, password: user.password })
-      })
-      const data = await response.json()
+      });
+      const data = await response.json();
       if (data.success) {
-        localStorage.setItem('token', data.token)
-        navigate('/task')
+        localStorage.setItem('token', data.token);
+        navigate('/task');
       }
-
-      console.log(data)
+      console.log(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+    setLoading(false); // Set loading back to false after form submission is complete
+  };
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value })
-  }
-
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -77,7 +79,6 @@ const SignIn = () => {
               <label htmlFor="password" className="block text font-medium leading-6 text-gray-900">
                 Password
               </label>
-
             </div>
             <div className="mt-2">
               <input
@@ -93,12 +94,19 @@ const SignIn = () => {
           </div>
 
           <div>
-            <button
-              type="submit"
-              className=" flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign in
-            </button>
+            {/* Conditionally render loading bar */}
+            {loading ? (
+              <div className='flex w-full justify-center '>
+                <CircularProgress />
+              </div>
+                         ) : (
+              <button
+                type="submit"
+                className=" flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </form>
 
@@ -110,7 +118,8 @@ const SignIn = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;
+

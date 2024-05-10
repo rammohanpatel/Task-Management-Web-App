@@ -1,5 +1,6 @@
 import {React,useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom' 
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const SignUp = () => {
@@ -12,10 +13,13 @@ const SignUp = () => {
 
   const {username, email, password} = user
 
+  const [loading,setLoading] = useState(false)
+
   const navigate = useNavigate()
   
   const registerUser = async (e)=>{
     e.preventDefault()
+    setLoading(true);
     try {
       const response = await fetch('https://task-management-web-app.onrender.com/signup',{
         method: 'POST',
@@ -34,6 +38,7 @@ const SignUp = () => {
     } catch (error) {
       console.log(error)
     }
+    setLoading(false);
   }
 
   return (
@@ -88,8 +93,7 @@ const SignUp = () => {
               </div>
               <div className="mt-2">
                 <input
-                  id="password"
-                  
+                  id="password"                 
                   name="password"
                   type="password"
                   autoComplete="current-password"
@@ -101,12 +105,20 @@ const SignUp = () => {
             </div>
 
             <div>
-              <button
+              {/* Conditionally render loading bar */}
+              {loading ? (
+                <div className="flex w-full justify-center">
+                  <CircularProgress />
+                </div>
+              ):(
+                <button
                 type="submit"
                 className="flex w-full  justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign Up
               </button>
+              )}
+              
             </div>
           </form>
 
